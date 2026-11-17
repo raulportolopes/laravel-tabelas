@@ -1,68 +1,75 @@
-{{--
-    Layout base. As outras views usam @extends('layout') e preenchem @section('conteudo').
-    O CSS está inline de propósito: assim o projeto não depende de npm/Vite nem de
-    arquivos em public/, o que facilita publicar numa subpasta.
---}}
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('titulo') · Laravel Tabelas</title>
+    <title>@yield('titulo') · Biblioteca</title>
     <style>
-        :root { --fundo:#f5f6fa; --card:#fff; --texto:#1f2430; --suave:#5b6275; --borda:#dde1ea;
-                --azul:#2453d6; --verde:#137a3b; --vermelho:#b42318; --codigo:#13161f; }
-        * { box-sizing: border-box; }
-        body { margin:0; font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif; background:var(--fundo); color:var(--texto); line-height:1.55; }
-        header { background:#14213d; color:#fff; }
-        header .wrap { display:flex; flex-wrap:wrap; gap:1rem; align-items:center; justify-content:space-between; }
-        header a { color:#fff; text-decoration:none; }
-        nav a { padding:.4rem .8rem; border-radius:6px; }
-        nav a[aria-current="page"], nav a:hover, nav a:focus-visible { background:rgba(255,255,255,.18); }
-        .wrap { max-width:1100px; margin:0 auto; padding:1rem; }
-        h1 { font-size:1.7rem; margin:.5rem 0; } h2 { font-size:1.25rem; margin:0 0 .4rem; }
-        .card { background:var(--card); border:1px solid var(--borda); border-radius:10px; padding:1.1rem 1.2rem; margin:1.2rem 0; }
-        .tag { display:inline-block; font-size:.75rem; font-weight:700; padding:.15rem .55rem; border-radius:99px; background:#e6ecff; color:var(--azul); margin-bottom:.4rem; }
-        code { background:#eef0f5; padding:.05rem .3rem; border-radius:4px; font-family: Consolas, "Courier New", monospace; font-size:.92em; }
-        pre { background:var(--codigo); color:#e8eaf0; padding: .8rem 1rem; border-radius:8px; overflow-x:auto; font-size:.88rem; margin:.3rem 0 .8rem; }
-        pre code { background:none; padding:0; color:inherit; }
-        .rotulo { font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--suave); margin-top:.8rem; }
-        .sql pre { background:#0d2b1e; color:#b9f3cf; }
-        .contador { font-weight:700; padding:.1rem .5rem; border-radius:6px; }
-        .contador.ok { background:#dcf5e5; color:var(--verde); }
-        .contador.alerta { background:#fde4e1; color:var(--vermelho); }
+        :root { --fundo:#f4f1ea; --card:#fffdf8; --texto:#2b2620; --suave:#6f665b; --borda:#e3dccf;
+                --marca:#7a2e1f; --marca-escura:#5c2116; --perigo:#b42318; --ok:#1d7a46; }
+        * { box-sizing:border-box; }
+        body { margin:0; font-family:system-ui, "Segoe UI", Roboto, Arial, sans-serif; background:var(--fundo); color:var(--texto); line-height:1.5; }
+        a { color:var(--marca); }
+        .topo { background:var(--marca); color:#fff; }
+        .topo .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+        .topo a { color:#fff; text-decoration:none; font-weight:700; font-size:1.15rem; letter-spacing:.02em; }
+        .wrap { max-width:1100px; margin:0 auto; padding:1rem 1.25rem; }
+        h1 { font-family:Georgia, "Times New Roman", serif; font-size:1.9rem; margin:.5rem 0 .25rem; }
+        .sub { color:var(--suave); margin:0 0 1.25rem; }
+        .card { background:var(--card); border:1px solid var(--borda); border-radius:12px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+        .barra { display:flex; flex-wrap:wrap; gap:.75rem; align-items:end; justify-content:space-between; padding:1rem 1.25rem; border-bottom:1px solid var(--borda); }
+        .barra form { display:flex; flex-wrap:wrap; gap:.6rem; align-items:end; }
+        label { display:flex; flex-direction:column; gap:.25rem; font-size:.85rem; font-weight:600; color:var(--suave); }
+        input, select { font:inherit; color:var(--texto); background:#fff; padding:.5rem .65rem; border:1px solid var(--borda); border-radius:8px; min-width:0; }
+        input:focus, select:focus { border-color:var(--marca); }
+        .botao { display:inline-flex; align-items:center; gap:.4rem; font:inherit; font-weight:600; padding:.55rem 1rem; border-radius:8px; border:1px solid transparent; cursor:pointer; text-decoration:none; }
+        .botao.primario { background:var(--marca); color:#fff; }
+        .botao.primario:hover { background:var(--marca-escura); }
+        .botao.secundario { background:#fff; color:var(--texto); border-color:var(--borda); }
+        .botao.perigo { background:transparent; color:var(--perigo); border-color:#f1c4bf; padding:.35rem .7rem; font-size:.875rem; }
+        .botao.perigo:hover { background:#fdecea; }
+        :focus-visible { outline:3px solid #e9a23b; outline-offset:2px; }
         .tabela { overflow-x:auto; }
-        table { border-collapse:collapse; width:100%; font-size:.9rem; }
-        th, td { border-bottom:1px solid var(--borda); padding:.4rem .55rem; text-align:left; vertical-align:top; }
-        th { background:#f0f2f7; }
-        details summary { cursor:pointer; color:var(--azul); font-weight:600; }
-        .grade { display:grid; gap:1rem; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); }
-        .tabela-bd h3 { margin:0 0 .4rem; font-size:1rem; }
-        .tabela-bd ul { list-style:none; padding:0; margin:0; font-family:Consolas, monospace; font-size:.85rem; }
-        .pk { color:#a15c00; font-weight:700; } .fk { color:var(--azul); font-weight:700; }
-        form.experimente { display:flex; flex-wrap:wrap; gap:.6rem; align-items:end; }
-        label { display:flex; flex-direction:column; font-size:.85rem; font-weight:600; }
-        select, button { font:inherit; padding:.4rem .6rem; border-radius:6px; border:1px solid var(--borda); }
-        button { background:var(--azul); color:#fff; border:0; cursor:pointer; }
-        :focus-visible { outline:3px solid #ffb703; outline-offset:2px; }
-        footer { color:var(--suave); font-size:.85rem; text-align:center; padding:2rem 1rem; }
+        table { width:100%; border-collapse:collapse; }
+        th, td { padding:.75rem 1rem; text-align:left; border-bottom:1px solid var(--borda); vertical-align:middle; }
+        th { font-size:.8rem; text-transform:uppercase; letter-spacing:.05em; color:var(--suave); background:#faf6ee; }
+        tbody tr:hover { background:#fbf7f0; }
+        td.titulo { font-family:Georgia, "Times New Roman", serif; font-size:1.05rem; font-weight:700; }
+        .num { text-align:right; font-variant-numeric:tabular-nums; }
+        .selo { display:inline-block; padding:.15rem .6rem; border-radius:99px; background:#f1e7d8; color:var(--marca-escura); font-size:.8rem; font-weight:600; }
+        .vazio { padding:2.5rem 1rem; text-align:center; color:var(--suave); }
+        .alerta { padding:.75rem 1rem; border-radius:8px; margin-bottom:1rem; }
+        .alerta.sucesso { background:#e3f4ea; color:var(--ok); border:1px solid #bfe3cd; }
+        .alerta.erro { background:#fdecea; color:var(--perigo); border:1px solid #f1c4bf; }
+        .alerta ul { margin:.25rem 0 0; padding-left:1.2rem; }
+        .rodape-tabela { padding:.75rem 1.25rem; color:var(--suave); font-size:.875rem; }
+        .formulario { padding:1.25rem; display:grid; gap:1rem; grid-template-columns:repeat(2, minmax(0, 1fr)); }
+        .formulario .inteiro { grid-column:1 / -1; }
+        .formulario .acoes { grid-column:1 / -1; display:flex; gap:.6rem; justify-content:flex-end; }
+        .campo-erro { border-color:var(--perigo); }
+        .msg-erro { color:var(--perigo); font-weight:500; font-size:.8rem; }
+        @media (max-width: 640px) {
+            .formulario { grid-template-columns:1fr; }
+            .esconde-celular { display:none; }
+            th, td { padding:.6rem .6rem; }
+            td.titulo { font-size:.95rem; }
+            .barra, .barra form { align-items:stretch; }
+            .barra > a.botao { justify-content:center; width:100%; }
+        }
     </style>
 </head>
 <body>
-<header>
+<header class="topo">
     <div class="wrap">
-        <a href="{{ route('home') }}"><strong>Laravel Tabelas</strong> · ordenação e relações</a>
-        <nav aria-label="Principal">
-            {{-- request()->routeIs() marca o link da página atual --}}
-            <a href="{{ route('home') }}" @if(request()->routeIs('home')) aria-current="page" @endif>Início</a>
-            <a href="{{ route('ordenacao') }}" @if(request()->routeIs('ordenacao')) aria-current="page" @endif>Ordenação</a>
-            <a href="{{ route('relacoes') }}" @if(request()->routeIs('relacoes')) aria-current="page" @endif>Relações</a>
-        </nav>
+        <a href="{{ route('livros.index') }}">📚 Biblioteca</a>
     </div>
 </header>
 <main class="wrap">
+    @if (session('sucesso'))
+        <div class="alerta sucesso" role="status">{{ session('sucesso') }}</div>
+    @endif
+
     @yield('conteudo')
 </main>
-<footer>Material de estudo · SP Skills 2026 · #17 Tecnologias Web · Raul Porto Lopes (Avaliador)</footer>
 </body>
 </html>

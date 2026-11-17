@@ -11,16 +11,9 @@ class BookSeeder extends Seeder
 {
     public function run(): void
     {
-        // Busca os ids pelo nome para não depender de "id 1, id 2..." fixos.
-        $autor = Author::pluck('id', 'name');        // ['Machado de Assis' => 1, ...]
-        $categoria = Category::pluck('id', 'name');  // ['Romance' => 1, ...]
+        $autor = Author::pluck('id', 'name');
+        $categoria = Category::pluck('id', 'name');
 
-        /*
-         * [título, autor, categoria, páginas, publicação, cadastro no sistema]
-         * As datas de publicação são aproximadas (só o ano é o real); servem para estudo.
-         * A coluna "cadastro" (created_at) foi embaralhada de propósito, para que
-         * latest('published_at') e latest() (created_at) deem resultados diferentes.
-         */
         $livros = [
             ['Memórias Póstumas de Brás Cubas', 'Machado de Assis', 'Romance', 368, '1881-03-15', '2026-06-03 10:00:00'],
             ['Dom Casmurro', 'Machado de Assis', 'Romance', 256, '1899-12-01', '2026-06-01 09:00:00'],
@@ -42,8 +35,8 @@ class BookSeeder extends Seeder
         foreach ($livros as [$titulo, $nomeAutor, $nomeCategoria, $paginas, $publicacao, $cadastro]) {
             $livro = new Book([
                 'title'        => $titulo,
-                'author_id'    => $autor[$nomeAutor],          // FK -> authors.id
-                'category_id'  => $categoria[$nomeCategoria],  // FK -> categories.id
+                'author_id'    => $autor[$nomeAutor],
+                'category_id'  => $categoria[$nomeCategoria],
                 'pages'        => $paginas,
                 'published_at' => $publicacao,
             ]);
