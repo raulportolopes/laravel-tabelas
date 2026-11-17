@@ -9,7 +9,10 @@ class CategorySeeder extends Seeder
 {
     public function run(): void
     {
-        foreach (['Romance', 'Poesia', 'Conto', 'Crônica', 'Teatro'] as $name) {
+        foreach ([
+            'Romance', 'Poesia', 'Conto', 'Crônica', 'Teatro',
+            'Ensaio', 'Infantil', 'Biografia', 'Fantasia', 'Cordel',
+        ] as $name) {
             Category::create(['name' => $name]);
         }
     }

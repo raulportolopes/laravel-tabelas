@@ -7,24 +7,7 @@
 
 <section class="card">
     <div class="barra">
-        <form method="get" action="{{ route('livros.index') }}">
-            <label>Ordenar por
-                <select name="ordem">
-                    <option value="title" @selected(request('ordem') === 'title')>Título</option>
-                    <option value="published_at" @selected(request('ordem') === 'published_at')>Data de publicação</option>
-                    <option value="pages" @selected(request('ordem') === 'pages')>Páginas</option>
-                    <option value="created_at" @selected(request('ordem') === 'created_at')>Data de cadastro</option>
-                </select>
-            </label>
-            <label>Direção
-                <select name="direcao">
-                    <option value="asc" @selected(request('direcao') === 'asc')>Crescente</option>
-                    <option value="desc" @selected(request('direcao') === 'desc')>Decrescente</option>
-                </select>
-            </label>
-            <button type="submit" class="botao secundario">Aplicar</button>
-        </form>
-
+        <span class="contagem">{{ $books->count() }} {{ $books->count() === 1 ? 'livro' : 'livros' }}</span>
         <a href="{{ route('livros.create') }}" class="botao primario">+ Novo livro</a>
     </div>
 
@@ -65,7 +48,5 @@
             </tbody>
         </table>
     </div>
-
-    <div class="rodape-tabela">{{ $books->count() }} {{ $books->count() === 1 ? 'livro' : 'livros' }}</div>
 </section>
 @endsection

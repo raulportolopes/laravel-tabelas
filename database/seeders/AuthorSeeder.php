@@ -22,6 +22,14 @@ class AuthorSeeder extends Seeder
             ['Cecília Meireles', 'Brasil', '2026-01-28 08:20:00', null],
             ['Ariano Suassuna', 'Brasil', '2026-05-15 10:00:00',
                 ['Dramaturgo e criador do Movimento Armorial.', '1927-06-16', 'João Pessoa']],
+            ['Graciliano Ramos', 'Brasil', '2026-02-11 13:00:00',
+                ['Autor de Vidas Secas e de São Bernardo.', '1892-10-27', 'Quebrangulo']],
+            ['Rachel de Queiroz', 'Brasil', '2026-03-22 15:40:00',
+                ['Primeira mulher eleita para a Academia Brasileira de Letras.', '1910-11-17', 'Fortaleza']],
+            ['Lygia Fagundes Telles', 'Brasil', '2026-04-18 09:25:00', null],
+            ['José Saramago', 'Portugal', '2026-01-15 17:05:00',
+                ['Prêmio Nobel de Literatura de 1998.', '1922-11-16', 'Azinhaga']],
+            ['Monteiro Lobato', 'Brasil', '2026-05-03 11:50:00', null],
         ];
 
         foreach ($autores as [$nome, $pais, $cadastro, $perfil]) {

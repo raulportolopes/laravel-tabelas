@@ -13,6 +13,9 @@
         .topo { background:var(--marca); color:#fff; }
         .topo .wrap { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
         .topo a { color:#fff; text-decoration:none; font-weight:700; font-size:1.15rem; letter-spacing:.02em; }
+        .menu { display:flex; gap:.25rem; }
+        .topo .menu a { font-size:.95rem; font-weight:600; padding:.4rem .75rem; border-radius:6px; }
+        .topo .menu a[aria-current="page"], .topo .menu a:hover { background:rgba(255,255,255,.18); }
         .wrap { max-width:1100px; margin:0 auto; padding:1rem 1.25rem; }
         h1 { font-family:Georgia, "Times New Roman", serif; font-size:1.9rem; margin:.5rem 0 .25rem; }
         .sub { color:var(--suave); margin:0 0 1.25rem; }
@@ -42,6 +45,7 @@
         .alerta.sucesso { background:#e3f4ea; color:var(--ok); border:1px solid #bfe3cd; }
         .alerta.erro { background:#fdecea; color:var(--perigo); border:1px solid #f1c4bf; }
         .alerta ul { margin:.25rem 0 0; padding-left:1.2rem; }
+        .contagem { color:var(--suave); font-weight:600; align-self:center; }
         .rodape-tabela { padding:.75rem 1.25rem; color:var(--suave); font-size:.875rem; }
         .formulario { padding:1.25rem; display:grid; gap:1rem; grid-template-columns:repeat(2, minmax(0, 1fr)); }
         .formulario .inteiro { grid-column:1 / -1; }
@@ -55,6 +59,7 @@
             td.titulo { font-size:.95rem; }
             .barra, .barra form { align-items:stretch; }
             .barra > a.botao { justify-content:center; width:100%; }
+            .topo .wrap { flex-wrap:wrap; }
         }
     </style>
 </head>
@@ -62,6 +67,11 @@
 <header class="topo">
     <div class="wrap">
         <a href="{{ route('livros.index') }}">📚 Biblioteca</a>
+        <nav class="menu" aria-label="Principal">
+            <a href="{{ route('livros.index') }}" @if(request()->routeIs('livros.*')) aria-current="page" @endif>Livros</a>
+            <a href="{{ route('autores.index') }}" @if(request()->routeIs('autores.*')) aria-current="page" @endif>Autores</a>
+            <a href="{{ route('categorias.index') }}" @if(request()->routeIs('categorias.*')) aria-current="page" @endif>Categorias</a>
+        </nav>
     </div>
 </header>
 <main class="wrap">
