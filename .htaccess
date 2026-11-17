@@ -1,0 +1,22 @@
+# ---------------------------------------------------------------------------
+# .htaccess da RAIZ do projeto (usado quando a pasta inteira fica em htdocs/tabelas)
+# Precisa de mod_rewrite ligado e "AllowOverride All" no Apache.
+# ---------------------------------------------------------------------------
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # 1) SEGURANÇA: como o projeto inteiro fica dentro do htdocs, bloqueia o
+    #    acesso direto ao código e às configurações (.env, vendor, storage...).
+    RewriteRule (^|/)\. - [F,L]
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|storage|tests|vendor)(/|$) - [F,L]
+    RewriteRule ^(artisan|composer\.(json|lock)|package\.json|phpunit\.xml|vite\.config\.js|.*\.md)$ - [F,L]
+
+    # 2) Arquivos que existem em public/ (favicon, robots.txt...) são servidos de lá.
+    RewriteRule ^(favicon\.ico|robots\.txt)$ public/$1 [L]
+
+    # 3) Todo o resto vai para o index.php da raiz, que carrega o Laravel.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ index.php [L]
+</IfModule>
